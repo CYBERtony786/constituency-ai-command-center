@@ -1,3 +1,4 @@
+import 'grievance_form.dart';
 // File: lib/screens/home_screen.dart
 
 import 'package:flutter/material.dart';
@@ -257,17 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
   
   // Placeholder screens (we'll build these later)
   Widget _buildComplaintsPlaceholder() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.construction, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('Complaint Form', style: TextStyle(fontSize: 20)),
-          Text('Building this next...', style: TextStyle(color: Colors.grey)),
-        ],
-      ),
-    );
+  return GrievanceForm();
   }
   
   Widget _buildDashboardPlaceholder() {
