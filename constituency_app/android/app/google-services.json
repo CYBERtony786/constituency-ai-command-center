@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287178473227",
+    "project_id": "constituency-ai-nakul",
+    "storage_bucket": "constituency-ai-nakul.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287178473227:android:7b3a5534b5dc882cd4ac0e",
+        "android_client_info": {
+          "package_name": "com.example.constituency_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAGTYlgpzy-hpbV2oJ0ZBVbA2r0ICF6Y0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

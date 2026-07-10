@@ -1,5 +1,5 @@
 // File: lib/screens/grievance_form.dart
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 class GrievanceForm extends StatefulWidget {
   @override
@@ -272,31 +272,56 @@ class _GrievanceFormState extends State<GrievanceForm> {
   }
   
   // Submit function
-  void _submitComplaint() {
-    // Validate
-    if (_complaintController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please describe your complaint'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-    
-    // Show loading
-    setState(() {
-      _isSubmitting = true;
-    });
-    
-    // Simulate submission (we'll connect Firebase later)
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isSubmitting = false;
-        _isSubmitted = true;
-      });
-    });
+  void _submitComplaint() async {
+  // Validate
+  if (_complaintController.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Please describe your complaint'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
   }
+  
+  // Show loading
+  setState(() {
+    _isSubmitting = true;
+  });
+  
+  try {
+    // Save to Firebase Firestore
+    await FirebaseFirestore.instance.collection('grievances').add({
+      'name': _nameController.text,
+      'phone': _phoneController.text,
+      'complaint_text': _complaintController.text,
+      'category': _selectedCategory,
+      'language': _selectedLanguage,
+      'location_text': _locationController.text,
+      'status': 'pending',
+      'priority_score': 5,
+      'timestamp': FieldValue.serverTimestamp(),
+      'ai_analysis': null, // Will be filled by AI later
+    });
+    
+    setState(() {
+      _isSubmitting = false;
+      _isSubmitted = true;
+    });
+    
+  } catch (e) {
+    setState(() {
+      _isSubmitting = false;
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error: $e'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
   
   // Success screen after submission
   Widget _buildSuccessScreen() {
@@ -311,7 +336,7 @@ class _GrievanceFormState extends State<GrievanceForm> {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.green[50],
+                color: Colors.red,
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.check_circle, size: 80, color: Colors.green),
