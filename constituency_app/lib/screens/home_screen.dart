@@ -1,6 +1,5 @@
-import 'grievance_form.dart';
 // File: lib/screens/home_screen.dart
-
+import 'grievance_form.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -259,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Placeholder screens (we'll build these later)
   Widget _buildComplaintsPlaceholder() {
   return GrievanceForm();
-  }
+}
   
   Widget _buildDashboardPlaceholder() {
     return Center(

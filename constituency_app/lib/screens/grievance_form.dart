@@ -1,6 +1,8 @@
 // File: lib/screens/grievance_form.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class GrievanceForm extends StatefulWidget {
   @override
   _GrievanceFormState createState() => _GrievanceFormState();
@@ -272,7 +274,7 @@ class _GrievanceFormState extends State<GrievanceForm> {
   }
   
   // Submit function
-  void _submitComplaint() async {
+ void _submitComplaint() async {
   // Validate
   if (_complaintController.text.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -336,7 +338,7 @@ class _GrievanceFormState extends State<GrievanceForm> {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: Colors.red[50],
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.check_circle, size: 80, color: Colors.green),
