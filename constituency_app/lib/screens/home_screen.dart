@@ -6,6 +6,7 @@ import 'admin_screen.dart';
 import 'projects_screen.dart';
 import 'chat_screen.dart';
 import 'resource_planner.dart';
+import 'track_complaint.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -201,9 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Icons.track_changes,
             Colors.teal,
             () {
-              // Will add tracking later
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Tracking feature coming soon!')),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TrackComplaintScreen()),
               );
             },
           ),
