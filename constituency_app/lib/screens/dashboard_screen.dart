@@ -43,11 +43,75 @@ class DashboardScreen extends StatelessWidget {
           ),
           SizedBox(height: 12),
           _buildCategoryBreakdown(),
+          SizedBox(height: 20),
+
+          // Projects Section
+          Text(
+            '🏗️ Active Projects',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 12),
+        _buildProjectsList(),
         ],
+
       ),
     );
   }
   
+  Widget _buildProjectsList() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+        .collection('projects')
+        .limit(5)
+        .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+      
+        return Column(
+          children: snapshot.data!.docs.map((doc) {
+            var data = doc.data() as Map<String, dynamic>;
+            int progress = data['progress_percentage'] ?? 0;
+            Color statusColor = data['status'] == 'completed' ? Colors.green :
+                             data['status'] == 'delayed' ? Colors.red : Colors.orange;
+          
+            return Card(
+              margin: EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                leading: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 40, height: 40,
+                      child: CircularProgressIndicator(
+                        value: progress / 100,
+                        backgroundColor: Colors.grey[200],
+                        valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+                        strokeWidth: 4,
+                      ),
+                    ),
+                    Text('$progress%', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                title: Text(data['project_name'] ?? '', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                subtitle: Text('Budget: ₹${((data['budget_sanctioned'] ?? 0) / 100000).toStringAsFixed(1)}L'),
+                trailing: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    (data['status'] ?? '').toString().toUpperCase(),
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: statusColor),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  } 
   // Live stats from Firestore
   Widget _buildLiveStats() {
     return StreamBuilder<QuerySnapshot>(

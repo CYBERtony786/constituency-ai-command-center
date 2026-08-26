@@ -3,6 +3,7 @@ import 'grievance_form.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'admin_screen.dart';
+import 'projects_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
