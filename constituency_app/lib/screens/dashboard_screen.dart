@@ -209,44 +209,80 @@ class DashboardScreen extends StatelessWidget {
             
             return Card(
               margin: EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: _getCategoryColor(data['category'] ?? 'other'),
-                  child: Icon(_getCategoryIcon(data['category'] ?? 'other'), color: Colors.white, size: 20),
-                ),
-                title: Text(
-                  data['complaint_text'] ?? 'No description',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14),
-                ),
-                subtitle: Row(
-                  children: [
-                    Icon(Icons.location_on, size: 14, color: Colors.grey),
-                    SizedBox(width: 4),
-                    Text(
-                      data['location_text'] ?? 'Unknown location',
-                      style: TextStyle(fontSize: 12),
+              child: ExpansionTile(
+  leading: CircleAvatar(
+    backgroundColor: _getCategoryColor(data['category'] ?? 'other'),
+    child: Icon(_getCategoryIcon(data['category'] ?? 'other'), color: Colors.white, size: 20),
+  ),
+  title: Text(
+    data['complaint_text'] ?? 'No description',
+    maxLines: 2,
+    overflow: TextOverflow.ellipsis,
+    style: TextStyle(fontSize: 14),
+  ),
+  subtitle: Row(
+    children: [
+      Icon(Icons.location_on, size: 14, color: Colors.grey),
+      SizedBox(width: 4),
+      Expanded(
+        child: Text(
+          data['location_text'] ?? 'Unknown location',
+          style: TextStyle(fontSize: 12),
+        ),
+      ),
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        decoration: BoxDecoration(
+          color: _getSeverityColor(data['ai_severity']),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          'Priority: ${data['priority_score'] ?? 5}/10',
+          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
+    ],
+  ),
+  children: [
+    // AI Analysis Details (shown when expanded)
+    Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (data['ai_summary'] != null)
+            _buildAnalysisRow('🤖 AI Summary', data['ai_summary']),
+          if (data['ai_severity'] != null)
+            _buildAnalysisRow('⚠️ Severity', data['ai_severity']),
+          if (data['ai_sentiment'] != null)
+            _buildAnalysisRow('😊 Sentiment', data['ai_sentiment']),
+          if (data['ai_department'] != null)
+            _buildAnalysisRow('🏢 Department', data['ai_department']),
+          if (data['ai_actions'] != null && data['ai_actions'] is List)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('📋 Suggested Actions:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                SizedBox(height: 4),
+                ...(data['ai_actions'] as List).map((action) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 16, bottom: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('• ', style: TextStyle(fontSize: 14)),
+                        Expanded(child: Text(action.toString(), style: TextStyle(fontSize: 13))),
+                      ],
                     ),
-                    Spacer(),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: data['status'] == 'resolved' ? Colors.green[100] : Colors.orange[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        (data['status'] ?? 'pending').toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: data['status'] == 'resolved' ? Colors.green[800] : Colors.orange[800],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  );
+                }).toList(),
+              ],
+            ),
+        ],
+      ),
+    ),
+  ],
+),
             );
           }).toList(),
         );
@@ -320,6 +356,29 @@ class DashboardScreen extends StatelessWidget {
       },
     );
   }
+
+  Widget _buildAnalysisRow(String label, String value) {
+  return Padding(
+    padding: EdgeInsets.only(bottom: 8),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('$label: ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+        Expanded(child: Text(value, style: TextStyle(fontSize: 13))),
+      ],
+    ),
+  );
+}
+
+Color _getSeverityColor(String? severity) {
+  switch (severity) {
+    case 'critical': return Colors.red;
+    case 'high': return Colors.orange;
+    case 'medium': return Colors.amber[700]!;
+    case 'low': return Colors.green;
+    default: return Colors.grey;
+  }
+}
   
   // Helper: Get color for category
   Color _getCategoryColor(String category) {

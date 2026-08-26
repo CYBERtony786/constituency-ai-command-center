@@ -1,7 +1,9 @@
 // File: lib/screens/grievance_form.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/gemini_service.dart';
+import 'dart:convert';
 
 class GrievanceForm extends StatefulWidget {
   @override
@@ -29,16 +31,16 @@ class _GrievanceFormState extends State<GrievanceForm> {
   
   // Categories list with icons
   final List<Map<String, dynamic>> categories = [
-  {'id': 'roads', 'label': 'Roads & Transport', 'icon': Icons.add_road, 'color': Colors.brown},
-  {'id': 'water', 'label': 'Water Supply', 'icon': Icons.water_drop, 'color': Colors.blue},
-  {'id': 'electricity', 'label': 'Electricity', 'icon': Icons.electrical_services, 'color': Colors.amber},
-  {'id': 'health', 'label': 'Healthcare', 'icon': Icons.local_hospital, 'color': Colors.red},
-  {'id': 'education', 'label': 'Education', 'icon': Icons.school, 'color': Colors.green},
-  {'id': 'sanitation', 'label': 'Sanitation', 'icon': Icons.cleaning_services, 'color': Colors.teal},
-  {'id': 'street_lights', 'label': 'Street Lights', 'icon': Icons.lightbulb, 'color': Colors.orange},
-  {'id': 'drainage', 'label': 'Drainage', 'icon': Icons.water, 'color': Colors.indigo},
-  {'id': 'garbage', 'label': 'Garbage', 'icon': Icons.delete_outline, 'color': Colors.grey},
-  {'id': 'other', 'label': 'Other', 'icon': Icons.more_horiz, 'color': Colors.purple},
+    {'id': 'roads', 'label': 'Roads & Transport', 'icon': Icons.add_road, 'color': Colors.brown},
+    {'id': 'water', 'label': 'Water Supply', 'icon': Icons.water_drop, 'color': Colors.blue},
+    {'id': 'electricity', 'label': 'Electricity', 'icon': Icons.electrical_services, 'color': Colors.amber},
+    {'id': 'health', 'label': 'Healthcare', 'icon': Icons.local_hospital, 'color': Colors.red},
+    {'id': 'education', 'label': 'Education', 'icon': Icons.school, 'color': Colors.green},
+    {'id': 'sanitation', 'label': 'Sanitation', 'icon': Icons.cleaning_services, 'color': Colors.teal},
+    {'id': 'street_lights', 'label': 'Street Lights', 'icon': Icons.lightbulb, 'color': Colors.orange},
+    {'id': 'drainage', 'label': 'Drainage', 'icon': Icons.water, 'color': Colors.indigo},
+    {'id': 'garbage', 'label': 'Garbage', 'icon': Icons.delete_outline, 'color': Colors.grey},
+    {'id': 'other', 'label': 'Other', 'icon': Icons.more_horiz, 'color': Colors.purple},
   ];
   
   // Languages
@@ -102,7 +104,7 @@ class _GrievanceFormState extends State<GrievanceForm> {
             child: DropdownButton<String>(
               value: _selectedLanguage,
               isExpanded: true,
-              underline: SizedBox(), // Remove default underline
+              underline: SizedBox(),
               items: languages.map((lang) {
                 return DropdownMenuItem(
                   value: lang,
@@ -155,11 +157,11 @@ class _GrievanceFormState extends State<GrievanceForm> {
           
           // Grid of category buttons
           GridView.builder(
-            shrinkWrap: true, // Important: prevents infinite height error
-            physics: NeverScrollableScrollPhysics(), // Disable grid scrolling
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // 3 items per row
-              childAspectRatio: 1.1, // Width/height ratio
+              crossAxisCount: 3,
+              childAspectRatio: 1.1,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
@@ -240,7 +242,7 @@ class _GrievanceFormState extends State<GrievanceForm> {
           
           // Submit Button
           SizedBox(
-            width: double.infinity, // Full width
+            width: double.infinity,
             height: 56,
             child: ElevatedButton(
               onPressed: _isSubmitting ? null : _submitComplaint,
@@ -273,57 +275,101 @@ class _GrievanceFormState extends State<GrievanceForm> {
     );
   }
   
-  // Submit function
- void _submitComplaint() async {
-  // Validate
-  if (_complaintController.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Please describe your complaint'),
-        backgroundColor: Colors.red,
-      ),
-    );
-    return;
-  }
-  
-  // Show loading
-  setState(() {
-    _isSubmitting = true;
-  });
-  
-  try {
-    // Save to Firebase Firestore
-    await FirebaseFirestore.instance.collection('grievances').add({
-      'name': _nameController.text,
-      'phone': _phoneController.text,
-      'complaint_text': _complaintController.text,
-      'category': _selectedCategory,
-      'language': _selectedLanguage,
-      'location_text': _locationController.text,
-      'status': 'pending',
-      'priority_score': 5,
-      'timestamp': FieldValue.serverTimestamp(),
-      'ai_analysis': null, // Will be filled by AI later
-    });
+  // Submit function with AI analysis
+  void _submitComplaint() async {
+    // Validate
+    if (_complaintController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please describe your complaint'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     
+    // Show loading
     setState(() {
-      _isSubmitting = false;
-      _isSubmitted = true;
+      _isSubmitting = true;
     });
     
-  } catch (e) {
-    setState(() {
-      _isSubmitting = false;
-    });
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error: $e'),
-        backgroundColor: Colors.red,
-      ),
-    );
+    try {
+      // Step 1: Get AI Analysis from Gemini
+      GeminiService gemini = GeminiService();
+      Map<String, dynamic> aiAnalysis = await gemini.analyzeGrievance(
+        _complaintController.text,
+        _selectedCategory,
+        _locationController.text,
+      );
+      
+      // Step 2: Try to parse the AI response
+      Map<String, dynamic>? parsedAnalysis;
+      int priorityScore = 5;
+      
+      try {
+        if (aiAnalysis['raw_analysis'] != null) {
+          parsedAnalysis = jsonDecode(aiAnalysis['raw_analysis']);
+          priorityScore = int.tryParse(parsedAnalysis?['priority_score']?.toString() ?? '5') ?? 5;
+        }
+      } catch (e) {
+        print('Could not parse AI response: $e');
+        // Not critical - we'll save the raw analysis
+      }
+      
+      // Step 3: Save to Firebase with AI analysis
+      DocumentReference docRef = await FirebaseFirestore.instance.collection('grievances').add({
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'complaint_text': _complaintController.text,
+        'category': parsedAnalysis?['category'] ?? _selectedCategory,
+        'language': _selectedLanguage,
+        'location_text': _locationController.text,
+        'status': 'processed',
+        'priority_score': priorityScore,
+        'timestamp': FieldValue.serverTimestamp(),
+        'ai_analysis': parsedAnalysis ?? aiAnalysis,
+        'ai_summary': parsedAnalysis?['summary'] ?? 'Analysis pending',
+        'ai_severity': parsedAnalysis?['severity'] ?? 'medium',
+        'ai_sentiment': parsedAnalysis?['sentiment'] ?? 'neutral',
+        'ai_actions': parsedAnalysis?['suggested_actions'] ?? [],
+        'ai_department': parsedAnalysis?['responsible_department'] ?? 'General',
+      });
+      
+      setState(() {
+        _isSubmitting = false;
+        _isSubmitted = true;
+      });
+      
+    } catch (e) {
+      // If AI fails, still save complaint without analysis
+      try {
+        await FirebaseFirestore.instance.collection('grievances').add({
+          'name': _nameController.text,
+          'phone': _phoneController.text,
+          'complaint_text': _complaintController.text,
+          'category': _selectedCategory,
+          'language': _selectedLanguage,
+          'location_text': _locationController.text,
+          'status': 'pending',
+          'priority_score': 5,
+          'timestamp': FieldValue.serverTimestamp(),
+          'ai_analysis': null,
+        });
+        
+        setState(() {
+          _isSubmitting = false;
+          _isSubmitted = true;
+        });
+      } catch (e2) {
+        setState(() {
+          _isSubmitting = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e2'), backgroundColor: Colors.red),
+        );
+      }
+    }
   }
-}
   
   // Success screen after submission
   Widget _buildSuccessScreen() {
@@ -338,7 +384,7 @@ class _GrievanceFormState extends State<GrievanceForm> {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.red[50],
+                color: Colors.green[50],
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.check_circle, size: 80, color: Colors.green),
