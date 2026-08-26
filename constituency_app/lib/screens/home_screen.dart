@@ -2,6 +2,7 @@
 import 'grievance_form.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
+import 'admin_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,22 +17,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Constituency AI'),
-        backgroundColor: Colors.blue[700],
-        foregroundColor: Colors.white,
-        actions: [
-          // Language button (we'll add functionality later)
-          IconButton(
-            icon: Icon(Icons.language),
-            onPressed: () {
-              // Will add language selection later
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Language feature coming soon!')),
-              );
-            },
-          ),
-        ],
+        title: GestureDetector(
+          onLongPress: () {
+            // Secret admin access - long press title
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminScreen()),
+            );
+          },
+          child: Text('Constituency AI'),
+        ),
+        // ... rest stays same
       ),
+
+    
+  
       
       // Body changes based on selected tab
       body: _getBody(),
