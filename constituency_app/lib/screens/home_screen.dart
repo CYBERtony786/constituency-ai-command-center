@@ -5,6 +5,7 @@ import 'dashboard_screen.dart';
 import 'admin_screen.dart';
 import 'projects_screen.dart';
 import 'chat_screen.dart';
+import 'resource_planner.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -205,6 +206,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 SnackBar(content: Text('Tracking feature coming soon!')),
               );
             },
+          ),
+          _buildActionCard(
+            'AI Resource Planner',
+            'Let AI plan your MPLADS budget allocation',
+            Icons.currency_rupee,
+          Colors.green,
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ResourcePlanner()),
+          );
+         },
           ),
         ],
       ),
