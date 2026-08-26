@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'admin_screen.dart';
 import 'projects_screen.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -267,16 +268,6 @@ class _HomeScreenState extends State<HomeScreen> {
 }
   
   Widget _buildChatPlaceholder() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.construction, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('AI Chat', style: TextStyle(fontSize: 20)),
-          Text('Building this next...', style: TextStyle(color: Colors.grey)),
-        ],
-      ),
-    );
-  }
+  return ChatScreen();
+} 
 }
