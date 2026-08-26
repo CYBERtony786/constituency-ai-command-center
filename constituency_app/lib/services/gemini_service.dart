@@ -1,18 +1,21 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
 
+import 'config.dart';
+
 class GeminiService {
-  // PASTE YOUR GEMINI API KEY HERE
-  // (We'll move it to environment variable later for security)
-  static const String _apiKey = '***REMOVED***';
-  
+  // API key comes from config file (not hardcoded here)
+  static const String _apiKey = AppConfig.geminiApiKey;
+
   late GenerativeModel _model;
-  
+
   GeminiService() {
     _model = GenerativeModel(
-      model: 'gemini-3.6-flash', // Using flash for speed + free tier
+      model: 'gemini-3.6-flash',
       apiKey: _apiKey,
     );
   }
+
+
   
   // FUNCTION 1: Analyze a citizen complaint
   Future<Map<String, dynamic>> analyzeGrievance(String complaintText, String category, String location) async {
