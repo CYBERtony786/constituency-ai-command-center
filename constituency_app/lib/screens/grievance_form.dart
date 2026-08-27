@@ -258,17 +258,33 @@ class _GrievanceFormState extends State<GrievanceForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 20, height: 20,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
                         ),
                         SizedBox(width: 12),
                         Text('Submitting...', style: TextStyle(fontSize: 18)),
                       ],
                     )
-                  : Text('SUBMIT COMPLAINT', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  : const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.send, size: 20),
+                        SizedBox(width: 10),
+                        Text(
+                          'SUBMIT COMPLAINT',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
             ),
           ),
-          
           SizedBox(height: 40),
         ],
       ),
