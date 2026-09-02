@@ -1,9 +1,10 @@
-import 'package:google_generative_ai/google_generative_ai.dart';
+// File: lib/services/gemini_service.dart
 
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'config.dart';
 
 class GeminiService {
-  // API key comes from config file (not hardcoded here)
+  // API key comes from config.dart (never hardcoded for GitHub safety)
   static const String _apiKey = AppConfig.geminiApiKey;
 
   late GenerativeModel _model;
@@ -15,10 +16,14 @@ class GeminiService {
     );
   }
 
-
-  
+  // ═════════════════════════════════════════════════════════
   // FUNCTION 1: Analyze a citizen complaint
-  Future<Map<String, dynamic>> analyzeGrievance(String complaintText, String category, String location) async {
+  // ═════════════════════════════════════════════════════════
+  Future<Map<String, dynamic>> analyzeGrievance(
+    String complaintText,
+    String category,
+    String location,
+  ) async {
     try {
       final prompt = '''
 You are an AI assistant helping an Indian Member of Parliament manage citizen grievances.
@@ -49,20 +54,16 @@ Return ONLY valid JSON. No explanation, no markdown.
 
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
-      
+
       String responseText = response.text ?? '{}';
-      
-      // Clean response (remove markdown if any)
-      responseText = responseText.replaceAll('```json', '').replaceAll('```', '').trim();
-      
-      // Parse JSON
-      // Using simple parsing since we're keeping it beginner-friendly
+      responseText =
+          responseText.replaceAll('```json', '').replaceAll('```', '').trim();
+
       return {
         'raw_analysis': responseText,
         'analyzed': true,
         'analyzed_at': DateTime.now().toIso8601String(),
       };
-      
     } catch (e) {
       print('Gemini Error: $e');
       return {
@@ -71,8 +72,10 @@ Return ONLY valid JSON. No explanation, no markdown.
       };
     }
   }
-  
+
+  // ═════════════════════════════════════════════════════════
   // FUNCTION 2: Chat with AI about constituency
+  // ═════════════════════════════════════════════════════════
   Future<String> chat(String question) async {
     try {
       final prompt = '''
@@ -89,16 +92,20 @@ Use bullet points where helpful.
 
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
-      
+
       return response.text ?? 'Sorry, I could not generate a response.';
-      
     } catch (e) {
       return 'Error: $e\n\nPlease check your internet connection and try again.';
     }
   }
-  
+
+  // ═════════════════════════════════════════════════════════
   // FUNCTION 3: Generate resource allocation plan
-  Future<String> generateAllocationPlan(double budgetCrores, Map<String, int> grievanceCounts) async {
+  // ═════════════════════════════════════════════════════════
+  Future<String> generateAllocationPlan(
+    double budgetCrores,
+    Map<String, int> grievanceCounts,
+  ) async {
     try {
       final prompt = '''
 You are an AI advisor helping an Indian MP allocate MPLADS budget.
@@ -125,16 +132,22 @@ Keep it practical and under 300 words.
 
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
-      
+
       return response.text ?? 'Could not generate plan.';
-      
     } catch (e) {
       return 'Error generating plan: $e';
     }
   }
-  
+
+  // ═════════════════════════════════════════════════════════
   // FUNCTION 4: Generate daily briefing
-  Future<String> generateDailyBriefing(int totalGrievances, int pending, int resolved, Map<String, int> categoryCounts) async {
+  // ═════════════════════════════════════════════════════════
+  Future<String> generateDailyBriefing(
+    int totalGrievances,
+    int pending,
+    int resolved,
+    Map<String, int> categoryCounts,
+  ) async {
     try {
       final prompt = '''
 You are an AI assistant briefing an Indian MP on their constituency status.
@@ -157,11 +170,63 @@ Use simple language suitable for busy politicians.
 
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
-      
+
       return response.text ?? 'Could not generate briefing.';
-      
     } catch (e) {
       return 'Error: $e';
+    }
+  }
+
+  // ═════════════════════════════════════════════════════════
+  // FUNCTION 5: Structured briefing for AI Workspace
+  // ═════════════════════════════════════════════════════════
+  Future<String> generateStructuredBriefing(
+    String userQuestion, {
+    required int totalGrievances,
+    required int highPriority,
+    required Map<String, int> categoryCounts,
+    required String languageName,
+  }) async {
+    final prompt = '''
+You are a senior policy advisor for an Indian Member of Parliament.
+Respond in $languageName language only.
+
+CONSTITUENCY DATA:
+- Total grievances: $totalGrievances
+- High priority grievances: $highPriority
+- Category breakdown: ${categoryCounts.entries.map((e) => '${e.key}: ${e.value}').join(', ')}
+
+MP asked: "$userQuestion"
+
+Reply in this EXACT structured format (keep short, professional):
+
+## Overview
+[1-2 sentence direct answer to the question]
+
+## Critical Issues
+- [Issue 1]
+- [Issue 2]
+- [Issue 3 if relevant]
+
+## Recommended Actions
+- [Action 1 - specific and doable this week]
+- [Action 2]
+- [Action 3]
+
+## Estimated Budget Impact
+₹[amount in Lakhs or Crores] — [1 line reasoning]
+
+Rules:
+- No greeting, no emoji spam
+- No markdown symbols other than ## and -
+- Keep total response under 180 words
+- Ground answers in the provided data
+''';
+
+    try {
+      return await chat(prompt);
+    } catch (e) {
+      return 'Unable to generate briefing right now.';
     }
   }
 }

@@ -3,15 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'screens/home_screen.dart';
+import 'screens/language_selection_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 
@@ -22,86 +22,68 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Constituency AI Command Center',
-      
       debugShowCheckedModeBanner: false,
-      
+
       // ════════════════════════════════════════════════════════
-      // PROFESSIONAL THEME (Day 14 UI Polish)
+      // CLEAN PROFESSIONAL THEME (Uses native system fonts for
+      // perfect multi-language rendering on web)
       // ════════════════════════════════════════════════════════
       theme: ThemeData(
         useMaterial3: true,
 
-        // Main colour palette for the application
+        scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0B57D0),
+          seedColor: const Color(0xFF1A73E8),
           brightness: Brightness.light,
         ),
 
-        // Top navigation bar design
         appBarTheme: const AppBarTheme(
           centerTitle: false,
           elevation: 0,
-          backgroundColor: Color(0xFF0B57D0),
+          backgroundColor: Color(0xFF1A73E8),
           foregroundColor: Colors.white,
           titleTextStyle: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: Colors.white,
+            letterSpacing: 0.5,
           ),
         ),
 
-        // Default card design
         cardTheme: CardThemeData(
-          elevation: 1.5,
+          color: Colors.white,
+          elevation: 0,
           margin: const EdgeInsets.symmetric(vertical: 6),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.grey.shade200, width: 1.5),
           ),
         ),
 
-        // Default elevated button design
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(48, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            textStyle: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        // Default text-field design
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: const Color(0xFFF8FAFD),
+          fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              color: Color(0xFFD0D7DE),
-            ),
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              color: Color(0xFF0B57D0),
-              width: 2,
-            ),
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFF1A73E8), width: 2),
           ),
         ),
       ),
-      
-      home: HomeScreen(),
+
+      home: const LanguageSelectionScreen(),
     );
   }
 }
