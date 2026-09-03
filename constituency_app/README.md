@@ -62,15 +62,13 @@ An integrated **AI-Powered Command Center** designed for MPs, district collector
 
 | Mobile View | Desktop View |
 |:---:|:---:|
-| ![Mobile View](<img width="823" height="1600" alt="Mobile View" src="https://github.com/user-attachments/assets/f7a43c99-3654-41b7-81fa-673b8dcaf355" />)
-) | ![Desktop View](<img width="1458" height="821" alt="Home" src="https://github.com/user-attachments/assets/a3c3c6a6-07eb-413f-8c11-b3bde94c068d" />)
-) |
+| ![Mobile View](<img width="823" height="1600" alt="Mobile View" src="https://github.com/user-attachments/assets/f7a43c99-3654-41b7-81fa-673b8dcaf355" />)|
+![Desktop View](<img width="1458" height="821" alt="Home" src="https://github.com/user-attachments/assets/a3c3c6a6-07eb-413f-8c11-b3bde94c068d" />)|
 
 | AI Assistant | Project Monitoring |
 |:---:|:---:|
-| ![AI Assistant](<img width="1470" height="826" alt="AI Chat" src="https://github.com/user-attachments/assets/a4689e10-7aba-4975-b063-4a936606a87e" />
-) | ![Project Monitoring](<img width="1459" height="826" alt="Projects" src="https://github.com/user-attachments/assets/c7332f7f-b6bf-46b1-ac84-07b1846e7b5c" />
-) |
+| ![AI Assistant](<img width="1470" height="826" alt="AI Chat" src="https://github.com/user-attachments/assets/a4689e10-7aba-4975-b063-4a936606a87e" />) |
+![Project Monitoring](<img width="1459" height="826" alt="Projects" src="https://github.com/user-attachments/assets/c7332f7f-b6bf-46b1-ac84-07b1846e7b5c" />) |
 
 | Complaints | Dashboard |
 |:---:|:---:|
