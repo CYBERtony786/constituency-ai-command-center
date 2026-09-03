@@ -62,26 +62,22 @@ An integrated **AI-Powered Command Center** designed for MPs, district collector
 
 | Mobile View | Desktop View |
 |:---:|:---:|
-| ![Mobile View](<img width="823" height="1600" alt="Mobile View" src="https://github.com/user-attachments/assets/194fb8a8-eb59-4b5c-9a57-e1e604588eff" />
-)|![Desktop View](<img width="1458" height="821" alt="Home" src="https://github.com/user-attachments/assets/e9061e7d-e3c7-4f1e-ae0a-42370ecdfe61" />
-)|
+|(<img width="823" height="1600" alt="Mobile View" src="https://github.com/user-attachments/assets/194fb8a8-eb59-4b5c-9a57-e1e604588eff" />)|(<img width="1458" height="821" alt="Home" src="https://github.com/user-attachments/assets/e9061e7d-e3c7-4f1e-ae0a-42370ecdfe61" />)|
 
 | AI Assistant | Project Monitoring |
 |:---:|:---:|
-| ![AI Assistant](<img width="1470" height="826" alt="AI Chat" src="https://github.com/user-attachments/assets/49b2f0c6-382b-454b-989e-b9079834aed8" />
-) |![Project Monitoring](<img width="1459" height="826" alt="Projects" src="https://github.com/user-attachments/assets/23c49486-6063-4d88-9234-2d61c0309296" />
-) |
+|(<img width="1470" height="826" alt="AI Chat" src="https://github.com/user-attachments/assets/49b2f0c6-382b-454b-989e-b9079834aed8" />)|
+(<img width="1459" height="826" alt="Projects" src="https://github.com/user-attachments/assets/23c49486-6063-4d88-9234-2d61c0309296" />)|
 
 | Complaints | Dashboard |
 |:---:|:---:|
-| ![Complaints](<img width="1465" height="816" alt="Complaints" src="https://github.com/user-attachments/assets/66e950a1-d8c2-4948-81bc-10d112f7272c" />
-)|![Dashboard]()
+|(<img width="1465" height="816" alt="Complaints" src="https://github.com/user-attachments/assets/66e950a1-d8c2-4948-81bc-10d112f7272c" />)|
+(<img width="1460" height="815" alt="Dasboard" src="https://github.com/user-attachments/assets/a70a2fa5-9278-4078-a119-cc4b935b2123" />)
 
 | Reports | Analytics |
 |:---:|:---:|
-| ![Reports](<img width="1452" height="824" alt="Reports" src="https://github.com/user-attachments/assets/a1dc8fb0-665d-4334-b014-041019f9d310" />
-)|![Analytics](<img width="1464" height="821" alt="Analytics" src="https://github.com/user-attachments/assets/4a2243f1-f21a-4d5d-869a-0b9ff2e5146d" />
-)
+|(<img width="1452" height="824" alt="Reports" src="https://github.com/user-attachments/assets/a1dc8fb0-665d-4334-b014-041019f9d310" />)|
+(<img width="1464" height="821" alt="Analytics" src="https://github.com/user-attachments/assets/4a2243f1-f21a-4d5d-869a-0b9ff2e5146d" />)
 
 
 
