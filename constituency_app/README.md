@@ -122,13 +122,15 @@ An integrated **AI-Powered Command Center** designed for MPs, district collector
    flutter pub get
      
 3. **Configure Firebase:**
-   '''bash
+   ```bash
    dart pub global activate flutterfire_cli
    flutterfire configure
 
 4.**Launch the Web App:**
-  '''bash
-  flutter run -d chrome
+  ```bash
+flutter run -d chrome
+ ```
+
 
 🌐 Live Demo & Deployment
 🔗 Live Web Application: https://constituency-ai-nakul.web.app
@@ -141,5 +143,13 @@ Built with ❤️ for public governance by **Nakul Chaurasia**
 
 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+
+
+
+   
+
+  
 
    
