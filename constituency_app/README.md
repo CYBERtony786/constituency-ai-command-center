@@ -137,7 +137,9 @@ flutter run -d chrome
 
 👤 Author & Contact
 Built with ❤️ for public governance by **Nakul Chaurasia**
+
 • GitHub: https://github.com/CYBERtony786
+
 • LinkedIn: https://www.linkedin.com/in/nakulchaurasia/
 
 
