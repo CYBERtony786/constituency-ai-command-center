@@ -59,6 +59,14 @@ An integrated **AI-Powered Command Center** designed for MPs, district collector
 ---
 
 ## 📸 Screenshots
+Desktop View: <img width="1458" height="821" alt="Home" src="https://github.com/user-attachments/assets/4dc9dc46-6432-436d-a413-a8eda58dcf52" />
+Mobile View: <img width="823" height="1600" alt="Mobile View" src="https://github.com/user-attachments/assets/196e99eb-1386-4676-be66-867b8b5a2f30" />
+
+AI Assistant: <img width="1470" height="826" alt="AI Chat" src="https://github.com/user-attachments/assets/eccddc90-4fea-4c03-9aff-e1731d8bd826" />
+Project Monitoring: <img width="1459" height="826" alt="Projects" src="https://github.com/user-attachments/assets/3eae0d8f-817b-4171-963f-2b97d4dd4624" />
+
+
+
 
 
 
